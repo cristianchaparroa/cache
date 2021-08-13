@@ -18,6 +18,20 @@ func TestMemoryStorageSuitInit(t *testing.T) {
 	suite.Run(t, new(memoryStorageSuite))
 }
 
+func  (s *memoryStorageSuite) TestMemory_new_with_bad_slot_variable() {
+	os.Setenv("SLOTS", "it-should-be-number")
+	defer  os.Clearenv()
+
+
+	defer func() {
+		if r := recover(); r == nil {
+			s.Fail("Call the constructor dont panic")
+		}
+	}()
+
+	_ = NewMemoryStorage()
+}
+
 func (s *memoryStorageSuite) TestMemory_init_capacity() {
 	os.Setenv("SLOTS", "10")
 	defer os.Clearenv()
@@ -84,6 +98,30 @@ func (s *memoryStorageSuite) TestMemory_Add_exceeds_capacity() {
 	if err == nil {
 		s.Fail("expected an error but get nil")
 	}
+}
+
+func (s *memoryStorageSuite) TestMemory_Get_existing_key() {
+	memory := NewMemoryStorage()
+	firstObject := `{"text": "ok"}`
+	memory.Add("1", firstObject)
+	memory.Add("2", `{"text": "unit testing"}`)
+
+	object, exist := memory.Get("1")
+
+	s.Equal(exist, true)
+	s.Equal(firstObject, object)
+}
+
+func (s *memoryStorageSuite) TestMemory_Get_non_existing_key() {
+	memory := NewMemoryStorage()
+	firstObject := `{"text": "ok"}`
+	memory.Add("1", firstObject)
+	memory.Add("2", `{"text": "unit testing"}`)
+
+	object, exist := memory.Get("100")
+
+	s.Equal(exist, false)
+	s.Nil(object)
 }
 
 func (s *memoryStorageSuite) TestMemory_Delete_existing_key() {
