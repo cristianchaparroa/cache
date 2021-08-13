@@ -55,6 +55,11 @@ func (m *memory) Add(key string, object interface{}) error {
 	return nil
 }
 
+func (m *memory) Get(key string) (interface{}, bool) {
+	v, exist := m.storage[key]
+	return v, exist
+}
+
 func (m *memory) Delete(key string) (interface{}, bool) {
 	v, exist := m.storage[key]
 

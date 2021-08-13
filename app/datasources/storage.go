@@ -7,5 +7,7 @@ type Storage interface {
 
 	Add(key string, object interface{}) error
 
+	Get(key string) (interface{}, bool)
+
 	Delete(key string) (interface{}, bool)
 }
