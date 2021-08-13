@@ -143,3 +143,29 @@ func (s *memoryStorageSuite) TestMemory_Delete_non_existing_key() {
 	s.Equal(expectedDeleted, isDeleted)
 	s.Nil(deletedObject)
 }
+
+func (s *memoryStorageSuite) TestMemory_Front() {
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		s.Nil(m.Front())
+	})
+
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		m.Add("1", `{"text": "front"}`)
+		s.NotNil(m.Front())
+	})
+}
+
+func (s *memoryStorageSuite) TestMemory_Back() {
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		s.Nil(m.Back())
+	})
+
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		m.Add("1", `{"text": "front"}`)
+		s.NotNil(m.Back())
+	})
+}
