@@ -5,7 +5,7 @@ type Storage interface {
 
 	Len() int
 
-	Add(key string, object interface{}) error
+	Add(key string, object interface{}) bool
 
 	Get(key string) (interface{}, bool)
 

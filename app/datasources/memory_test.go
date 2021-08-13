@@ -18,10 +18,9 @@ func TestMemoryStorageSuitInit(t *testing.T) {
 	suite.Run(t, new(memoryStorageSuite))
 }
 
-func  (s *memoryStorageSuite) TestMemory_new_with_bad_slot_variable() {
+func (s *memoryStorageSuite) TestMemory_new_with_bad_slot_variable() {
 	os.Setenv("SLOTS", "it-should-be-number")
-	defer  os.Clearenv()
-
+	defer os.Clearenv()
 
 	defer func() {
 		if r := recover(); r == nil {
@@ -94,10 +93,8 @@ func (s *memoryStorageSuite) TestMemory_Add_exceeds_capacity() {
 	s.Equal(memory.Capacity(), expectedCapacity)
 	s.Equal(memory.Len(), expectedLen)
 
-	err := memory.Add("3", `{"text": "cb insights"}`)
-	if err == nil {
-		s.Fail("expected an error but get nil")
-	}
+	isAdded := memory.Add("3", `{"text": "cb insights"}`)
+	s.Equal(false, isAdded)
 }
 
 func (s *memoryStorageSuite) TestMemory_Get_existing_key() {
