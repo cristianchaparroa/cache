@@ -2,7 +2,8 @@ package datasources
 
 import (
 	"cache/core"
-	"errors"
+	"container/list"
+	"fmt"
 	"github.com/thoas/go-funk"
 	"os"
 	"strconv"
@@ -17,8 +18,34 @@ const (
 	defaultCapacity = 10000
 )
 
+type Element struct {
+	Key     interface{}
+	Value   interface{}
+	element *list.Element
+}
+
+func newElement(e *list.Element) *Element {
+	if e == nil {
+		return nil
+	}
+
+	element := e.Value.(*Record)
+
+	return &Element{
+		element: e,
+		Key:     element.key,
+		Value:   element.value,
+	}
+}
+
+type Record struct {
+	key   interface{}
+	value interface{}
+}
+
 type memory struct {
-	storage map[string]interface{}
+	storage map[string]*list.Element
+	ll      *list.List
 	slots   int
 }
 
@@ -33,8 +60,12 @@ func NewMemoryStorage() Storage {
 		}
 		numberSlots = slots
 	}
-	storage := make(map[string]interface{}, numberSlots)
-	return &memory{storage: storage, slots: numberSlots}
+	storage := make(map[string]*list.Element, numberSlots)
+	return &memory{
+		storage: storage,
+		slots:   numberSlots,
+		ll:      list.New(),
+	}
 }
 
 func (m *memory) Capacity() int {
@@ -45,28 +76,54 @@ func (m *memory) Len() int {
 	return len(m.storage)
 }
 
-func (m *memory) Add(key string, object interface{}) error {
+func (m *memory) Add(key string, object interface{}) bool {
 
 	if m.slots == len(m.storage) {
-		return errors.New("storage is full")
+		return false
 	}
 
-	m.storage[key] = object
-	return nil
+	_, exist := m.storage[key]
+
+	if !exist {
+		element := m.ll.PushBack(&Record{
+			key:   key,
+			value: object,
+		})
+		m.storage[key] = element
+	} else {
+		fmt.Println(m.storage[key])
+		m.storage[key].Value.(*Record).value = object
+	}
+
+	return !exist
 }
 
 func (m *memory) Get(key string) (interface{}, bool) {
 	v, exist := m.storage[key]
-	return v, exist
+	if exist {
+		return v.Value.(*Record).value, true
+	}
+	return nil, exist
 }
 
 func (m *memory) Delete(key string) (interface{}, bool) {
 	v, exist := m.storage[key]
 
 	if exist {
+		m.ll.Remove(v)
 		delete(m.storage, key)
-		return v, true
+		return v.Value.(*Record).value, true
 	}
 
 	return nil, false
+}
+
+func (m *memory) Front() *Element {
+	front := m.ll.Front()
+	return newElement(front)
+}
+
+func (m *memory) Back() *Element {
+	back := m.ll.Back()
+	return newElement(back)
 }

@@ -18,10 +18,9 @@ func TestMemoryStorageSuitInit(t *testing.T) {
 	suite.Run(t, new(memoryStorageSuite))
 }
 
-func  (s *memoryStorageSuite) TestMemory_new_with_bad_slot_variable() {
+func (s *memoryStorageSuite) TestMemory_new_with_bad_slot_variable() {
 	os.Setenv("SLOTS", "it-should-be-number")
-	defer  os.Clearenv()
-
+	defer os.Clearenv()
 
 	defer func() {
 		if r := recover(); r == nil {
@@ -94,10 +93,8 @@ func (s *memoryStorageSuite) TestMemory_Add_exceeds_capacity() {
 	s.Equal(memory.Capacity(), expectedCapacity)
 	s.Equal(memory.Len(), expectedLen)
 
-	err := memory.Add("3", `{"text": "cb insights"}`)
-	if err == nil {
-		s.Fail("expected an error but get nil")
-	}
+	isAdded := memory.Add("3", `{"text": "cb insights"}`)
+	s.Equal(false, isAdded)
 }
 
 func (s *memoryStorageSuite) TestMemory_Get_existing_key() {
@@ -145,4 +142,30 @@ func (s *memoryStorageSuite) TestMemory_Delete_non_existing_key() {
 	expectedDeleted := false
 	s.Equal(expectedDeleted, isDeleted)
 	s.Nil(deletedObject)
+}
+
+func (s *memoryStorageSuite) TestMemory_Front() {
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		s.Nil(m.Front())
+	})
+
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		m.Add("1", `{"text": "front"}`)
+		s.NotNil(m.Front())
+	})
+}
+
+func (s *memoryStorageSuite) TestMemory_Back() {
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		s.Nil(m.Back())
+	})
+
+	s.Run("NilOnEmptyStorage", func() {
+		m := NewMemoryStorage()
+		m.Add("1", `{"text": "front"}`)
+		s.NotNil(m.Back())
+	})
 }
