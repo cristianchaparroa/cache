@@ -18,7 +18,7 @@ const (
 //
 var Injector = dig.New(dig.DeferAcyclicVerification())
 
-// CheckInjection is in charge to validate if invokation contains errors
+// CheckInjection is in charge to validate if invocation contains errors
 func CheckInjection(err error, instanceName string) {
 
 	if err == nil {
