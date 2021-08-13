@@ -10,4 +10,8 @@ type Storage interface {
 	Get(key string) (interface{}, bool)
 
 	Delete(key string) (interface{}, bool)
+
+	Front() *Element
+
+	Back() *Element
 }

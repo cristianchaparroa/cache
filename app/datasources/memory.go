@@ -18,6 +18,26 @@ const (
 	defaultCapacity = 10000
 )
 
+type Element struct {
+	Key     interface{}
+	Value   interface{}
+	element *list.Element
+}
+
+func newElement(e *list.Element) *Element {
+	if e == nil {
+		return nil
+	}
+
+	element := e.Value.(*Record)
+
+	return &Element{
+		element: e,
+		Key:     element.key,
+		Value:   element.value,
+	}
+}
+
 type Record struct {
 	key   interface{}
 	value interface{}
@@ -96,4 +116,14 @@ func (m *memory) Delete(key string) (interface{}, bool) {
 	}
 
 	return nil, false
+}
+
+func (m *memory) Front() *Element {
+	front := m.ll.Front()
+	return newElement(front)
+}
+
+func (m *memory) Back() *Element {
+	back := m.ll.Back()
+	return newElement(back)
 }
