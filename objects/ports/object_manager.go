@@ -2,7 +2,6 @@ package ports
 
 import (
 	"cache/objects"
-	"context"
 )
 
 // ObjectManager is in charge to perform all operations related to objects

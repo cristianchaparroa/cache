@@ -1,5 +1,7 @@
 package ports
 
+import "cache/objects"
+
 // CacheManager is in charge to perform operations with objects to be stored
 type CacheManager interface {
 
