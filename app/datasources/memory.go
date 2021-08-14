@@ -16,6 +16,7 @@ func init() {
 
 const (
 	defaultCapacity = 10000
+	defaultSlotsEnv = "DEFAULT_SLOTS"
 )
 
 type Element struct {
@@ -50,7 +51,7 @@ type memory struct {
 }
 
 func NewMemoryStorage() Storage {
-	ns := os.Getenv("SLOTS")
+	ns := os.Getenv(defaultSlotsEnv)
 
 	numberSlots := defaultCapacity
 	if !funk.IsEmpty(ns) {

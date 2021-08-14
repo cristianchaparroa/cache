@@ -19,7 +19,7 @@ func TestMemoryStorageSuitInit(t *testing.T) {
 }
 
 func (s *memoryStorageSuite) TestMemory_new_with_bad_slot_variable() {
-	os.Setenv("SLOTS", "it-should-be-number")
+	os.Setenv(defaultSlotsEnv, "it-should-be-number")
 	defer os.Clearenv()
 
 	defer func() {
@@ -32,7 +32,7 @@ func (s *memoryStorageSuite) TestMemory_new_with_bad_slot_variable() {
 }
 
 func (s *memoryStorageSuite) TestMemory_init_capacity() {
-	os.Setenv("SLOTS", "10")
+	os.Setenv(defaultSlotsEnv, "10")
 	defer os.Clearenv()
 	expectedLen := 0
 	expectedCapacity := 10
@@ -50,7 +50,7 @@ func (s *memoryStorageSuite) TestMemory_capacity_by_default() {
 }
 
 func (s *memoryStorageSuite) TestMemory_Add_repeated_keys() {
-	os.Setenv("SLOTS", "10")
+	os.Setenv(defaultSlotsEnv, "10")
 	defer os.Clearenv()
 
 	memory := NewMemoryStorage()
@@ -66,7 +66,7 @@ func (s *memoryStorageSuite) TestMemory_Add_repeated_keys() {
 }
 
 func (s *memoryStorageSuite) TestMemory_add_simple() {
-	os.Setenv("SLOTS", "10")
+	os.Setenv(defaultSlotsEnv, "10")
 	defer os.Clearenv()
 
 	memory := NewMemoryStorage()
@@ -81,7 +81,7 @@ func (s *memoryStorageSuite) TestMemory_add_simple() {
 }
 
 func (s *memoryStorageSuite) TestMemory_Add_exceeds_capacity() {
-	os.Setenv("SLOTS", "2")
+	os.Setenv(defaultSlotsEnv, "2")
 	defer os.Clearenv()
 
 	memory := NewMemoryStorage()
