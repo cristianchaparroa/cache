@@ -5,6 +5,8 @@ type Storage interface {
 
 	Len() int
 
+	IsFull() bool
+
 	Add(key string, object interface{}) bool
 
 	Get(key string) (interface{}, bool)

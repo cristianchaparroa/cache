@@ -2,8 +2,14 @@ package managers
 
 import (
 	"cache/app/datasources"
+	"cache/core"
 	"cache/objects/ports"
 )
+
+func init() {
+	err := core.Injector.Provide(NewCacheBuilder)
+	core.CheckInjection(err, "NewCacheBuilder")
+}
 
 const (
 	olderFistEvictionPolicy   = "OLDEST_FIRST"

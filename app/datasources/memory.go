@@ -38,6 +38,9 @@ func newElement(e *list.Element) *Element {
 		Value:   element.value,
 	}
 }
+func (e *Element) KeyToString() string {
+	return e.Key.(string)
+}
 
 type Record struct {
 	key   interface{}
@@ -75,6 +78,10 @@ func (m *memory) Capacity() int {
 
 func (m *memory) Len() int {
 	return len(m.storage)
+}
+
+func (m *memory) IsFull() bool {
+	return m.Capacity() == m.Len()
 }
 
 func (m *memory) Add(key string, object interface{}) bool {
