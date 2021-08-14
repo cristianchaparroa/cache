@@ -9,4 +9,5 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/thoas/go-funk v0.9.0
 	go.uber.org/dig v1.12.0
+	gopkg.in/yaml.v2 v2.2.8
 )
