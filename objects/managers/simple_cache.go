@@ -19,6 +19,10 @@ func (c *SimpleCache) Add(key string, o *objects.Object) bool {
 	return c.storage.Add(key, o)
 }
 
+func (c *SimpleCache) Get(key string) (*objects.Object, error) {
+	panic("implement me")
+}
+
 func (c *SimpleCache) Delete(key string) (*objects.Object, error) {
 	obj, bool := c.storage.Delete(key)
 	if bool {
