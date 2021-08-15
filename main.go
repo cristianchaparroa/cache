@@ -10,6 +10,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	s := delivery.NewServer()
 	s.Run()
 }

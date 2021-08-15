@@ -1,0 +1,3 @@
+slots: 1000
+ttl: 3600
+policy: NEWEST_FIRST
