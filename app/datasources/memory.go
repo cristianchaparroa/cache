@@ -1,12 +1,10 @@
 package datasources
 
 import (
+	"cache/app/conf"
 	"cache/core"
 	"container/list"
 	"fmt"
-	"github.com/thoas/go-funk"
-	"os"
-	"strconv"
 )
 
 func init() {
@@ -53,21 +51,11 @@ type memory struct {
 	slots   int
 }
 
-func NewMemoryStorage() Storage {
-	ns := os.Getenv(defaultSlotsEnv)
-
-	numberSlots := defaultCapacity
-	if !funk.IsEmpty(ns) {
-		slots, err := strconv.Atoi(ns)
-		if err != nil {
-			panic(err)
-		}
-		numberSlots = slots
-	}
-	storage := make(map[string]*list.Element, numberSlots)
+func NewMemoryStorage(c *conf.Config) Storage {
+	storage := make(map[string]*list.Element, c.Slots)
 	return &memory{
 		storage: storage,
-		slots:   numberSlots,
+		slots:   c.Slots,
 		ll:      list.New(),
 	}
 }
