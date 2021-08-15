@@ -31,6 +31,10 @@ func (c *LIFOCache) Add(key string, o *objects.Object) bool {
 	return c.storage.Add(key, o)
 }
 
+func (c *LIFOCache) Get(key string) (*objects.Object, error) {
+	panic("implement me")
+}
+
 func (c *LIFOCache) Delete(key string) (*objects.Object, error) {
 	obj, bool := c.storage.Delete(key)
 	if bool {
