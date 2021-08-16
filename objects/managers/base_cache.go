@@ -3,7 +3,6 @@ package managers
 import (
 	"cache/app/datasources"
 	"cache/objects"
-	"errors"
 )
 
 type baseCache struct {
@@ -15,7 +14,7 @@ func (c *baseCache) Delete(key string) (*objects.Object, error) {
 	if bool {
 		return obj.(*objects.Object), nil
 	}
-	return nil, errors.New("object not found")
+	return nil, objectNotFound
 }
 
 func (c *baseCache) Get(key string) (*objects.Object, error) {
@@ -27,6 +26,11 @@ func (c *baseCache) Get(key string) (*objects.Object, error) {
 	}
 
 	o := obj.(*objects.Object)
+
+	if o.TTL == objects.DefaultTTL {
+		return o, nil
+	}
+
 	if o.IsExpired() {
 		return nil, objectNotFound
 	}
