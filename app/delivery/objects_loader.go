@@ -2,8 +2,7 @@ package delivery
 
 import (
 	"cache/app/adapters/handlers"
-	// It calls the provides repositories to map into injector
-	_ "cache/app/adapters/repositories"
+	_ "cache/app/conf"
 	"cache/core"
 	// It calls the provides managers to map into injector
 	_ "cache/objects/managers"
