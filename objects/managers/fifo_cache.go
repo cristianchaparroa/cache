@@ -1,6 +1,7 @@
 package managers
 
 import (
+	"cache/app/conf"
 	"cache/app/datasources"
 	"cache/objects"
 	"cache/objects/ports"
@@ -14,6 +15,10 @@ func NewFIFOCache(storage datasources.Storage) ports.CacheManager {
 	return &FIFOCache{
 		baseCache: &baseCache{storage: storage},
 	}
+}
+
+func (c *FIFOCache) GetType() string {
+	return conf.NewestFirstEvictionPolicy
 }
 
 func (c *FIFOCache) Add(key string, o *objects.Object) bool {

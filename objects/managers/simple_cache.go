@@ -1,32 +1,24 @@
 package managers
 
 import (
+	"cache/app/conf"
 	"cache/app/datasources"
 	"cache/objects"
 	"cache/objects/ports"
-	"errors"
 )
 
 type SimpleCache struct {
-	storage datasources.Storage
+	*baseCache
 }
 
 func NewSimpleCache(storage datasources.Storage) ports.CacheManager {
-	return &SimpleCache{storage: storage}
+	return &SimpleCache{baseCache: &baseCache{storage: storage}}
+}
+
+func (c *SimpleCache) GetType() string {
+	return conf.RejectEvictionPolicy
 }
 
 func (c *SimpleCache) Add(key string, o *objects.Object) bool {
 	return c.storage.Add(key, o)
-}
-
-func (c *SimpleCache) Get(key string) (*objects.Object, error) {
-	panic("implement me")
-}
-
-func (c *SimpleCache) Delete(key string) (*objects.Object, error) {
-	obj, bool := c.storage.Delete(key)
-	if bool {
-		return obj.(*objects.Object), nil
-	}
-	return nil, errors.New("object not found")
 }
