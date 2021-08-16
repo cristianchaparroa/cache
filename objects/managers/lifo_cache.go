@@ -23,11 +23,6 @@ func (c *LIFOCache) Add(key string, o *objects.Object) bool {
 	}
 
 	oldest := c.storage.Front()
-	_, isDeleted := c.storage.Delete(oldest.KeyToString())
-
-	if !isDeleted {
-		return false
-	}
-
-	return c.storage.Add(key, o)
+	oldestKey := oldest.Key.(string)
+	return c.storage.Set(oldestKey, key, o)
 }

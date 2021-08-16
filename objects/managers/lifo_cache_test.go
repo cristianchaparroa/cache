@@ -60,7 +60,7 @@ func (s *lifoCacheSuit) TestLIFOCache_Add() {
 			Policy: conf.NewestFirstEvictionPolicy,
 		}
 		storage := datasources.NewMemoryStorage(c)
-		cache := NewFIFOCache(storage)
+		cache := NewLIFOCache(storage)
 
 		isAdded := cache.Add("1", objects.NewObject(`{"text": "ok"}`))
 		s.Equal(true, isAdded)
@@ -83,7 +83,7 @@ func (s *lifoCacheSuit) TestLIFOCache_Add() {
 		oldestElement := storage.Front()
 		oldestKey := oldestElement.Key.(string)
 
-		expectedOldestKey := "1"
+		expectedOldestKey := "6"
 		expectedCapacity := 5
 		expectedLen := 5
 		expectedIsFull := true
@@ -101,7 +101,7 @@ func (s *lifoCacheSuit) TestLIFOCache_Add() {
 			Policy: conf.NewestFirstEvictionPolicy,
 		}
 		storage := datasources.NewMemoryStorage(c)
-		cache := NewFIFOCache(storage)
+		cache := NewLIFOCache(storage)
 
 		isAdded := cache.Add("1", objects.NewObjectWithTTL(`{"text": "ok"}`, 10))
 		s.Equal(true, isAdded)
@@ -122,7 +122,7 @@ func (s *lifoCacheSuit) TestLIFOCache_Add() {
 			Policy: conf.NewestFirstEvictionPolicy,
 		}
 		storage := datasources.NewMemoryStorage(c)
-		cache := NewFIFOCache(storage)
+		cache := NewLIFOCache(storage)
 
 		isAdded := cache.Add("1", objects.NewObjectWithTTL(`{"text": "ok"}`, 10))
 		s.Equal(true, isAdded)
