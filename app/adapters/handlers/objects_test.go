@@ -125,3 +125,36 @@ func (s *objectsHandlerSuite) TestObjectsHandler_Delete_ObjectNotFound() {
 	s.False(c.Writer.Written())
 	s.Equal(http.StatusNotFound, c.Writer.Status())
 }
+
+func (s *objectsHandlerSuite) TestObjectsHandler_GetByKey_BadRequest() {
+
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.Request, _ = http.NewRequest(http.MethodDelete, "/object", nil)
+
+	s.handler.GetByKey(c)
+
+	s.Equal(http.StatusBadRequest, recorder.Code)
+}
+
+func (s *objectsHandlerSuite) TestObjectsHandler_GetByKey_Successfully() {
+
+	params := gin.Params{gin.Param{
+		Key:   "key",
+		Value: "1",
+	}}
+
+	rawData := `{"user": "test"}`
+	obj := objects.NewObject(rawData)
+
+	s.objectsManager.Mock.On("GetByKey", mock.Anything).
+		Return(obj, nil).Once()
+
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.Params = params
+	c.Request, _ = http.NewRequest(http.MethodDelete, "/object", nil)
+
+	s.handler.GetByKey(c)
+	s.Equal(http.StatusOK, recorder.Code)
+}
