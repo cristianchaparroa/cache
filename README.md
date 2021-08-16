@@ -61,3 +61,47 @@ You can run the unit testing using
 ```shell script
 go test ./... 
 ```
+
+
+## Usage
+
+1. Create an object in memory
+```shell
+curl --request POST \
+--url http://localhost:8080/object/1 \
+--header 'Content-Type: application/json' \
+--data '{
+"name": "cristian",
+"last": "chaparro",
+"country": "Colombia",
+"phone": "3226638130"
+}'
+```
+
+2. Get an object by key
+```shell
+curl --request GET \
+--url http://localhost:8080/object/1
+```
+
+3. Update an existent object
+
+```shell
+curl --request PUT \
+  --url http://localhost:8080/object/1 \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"name": "cristian",
+	"last": "chaparro",
+	"country": "Colombia",
+	"phone": "3226638130",
+	"another": "field"
+}'
+```
+
+4. Delete an object
+
+```shell
+curl --request DELETE \
+  --url http://localhost:8080/object/1
+```
