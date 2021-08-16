@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"cache/app/conf"
 	"cache/objects"
 	"cache/objects/ports"
 	"cache/objects/ports/mocks"
@@ -23,9 +24,13 @@ type objectsHandlerSuite struct {
 func (s *objectsHandlerSuite) SetupSuite() {
 	gin.SetMode(gin.TestMode)
 	s.engine = gin.Default()
-
+	config := &conf.Config{
+		Slots:  10,
+		TTL:    0,
+		Policy: "REJECT",
+	}
 	s.objectsManager = new(mocks.ObjectManager)
-	s.handler = newObjectsHandler(s.objectsManager)
+	s.handler = newObjectsHandler(config, s.objectsManager)
 }
 
 func TestObjectsHandlerSuiteInit(t *testing.T) {
