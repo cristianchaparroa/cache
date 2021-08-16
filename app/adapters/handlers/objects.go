@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"cache/app/conf"
 	"cache/core"
 	"cache/objects/ports"
 	"github.com/gin-gonic/gin"
@@ -14,17 +15,18 @@ func init() {
 
 // ObjectsHandler is in charge to handle the HTTP request for objects
 type ObjectsHandler struct {
+	config  *conf.Config
 	manager ports.ObjectManager
 }
 
 // NewObjectsHandler it creates a pointer to ObjectsHandler
-func newObjectsHandler(manager ports.ObjectManager) *ObjectsHandler {
-	return &ObjectsHandler{manager: manager}
+func newObjectsHandler(config *conf.Config, manager ports.ObjectManager) *ObjectsHandler {
+	return &ObjectsHandler{config: config, manager: manager}
 }
 
 // Save storages an object in cache
 func (h *ObjectsHandler) Save(c *gin.Context) {
-	req, err := NewObjectSaveRequest(c)
+	req, err := NewObjectSaveRequest(c, h.config)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)

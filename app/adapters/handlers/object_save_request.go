@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"cache/app/conf"
 	"cache/objects"
 	"github.com/gin-gonic/gin"
 	"github.com/thoas/go-funk"
@@ -14,7 +15,7 @@ type objectSaveRequest struct {
 	TTL  int64
 }
 
-func NewObjectSaveRequest(c *gin.Context) (*objectSaveRequest, error) {
+func NewObjectSaveRequest(c *gin.Context, config *conf.Config) (*objectSaveRequest, error) {
 	keyParam := c.Param("key")
 	if funk.IsEmpty(keyParam) {
 		return nil, badRequest
@@ -33,6 +34,8 @@ func NewObjectSaveRequest(c *gin.Context) (*objectSaveRequest, error) {
 		if err != nil {
 			ttl = ttlParsed
 		}
+	} else {
+		ttl = config.TTL
 	}
 
 	return &objectSaveRequest{

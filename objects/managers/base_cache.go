@@ -28,10 +28,6 @@ func (c *baseCache) Get(key string) (*objects.Object, error) {
 
 	o := obj.(*objects.Object)
 
-	if o.TTL == objects.DefaultTTL {
-		return o, nil
-	}
-
 	if o.IsExpired() {
 		c.storage.Delete(key)
 		return nil, ports.ObjectNotFound
