@@ -9,19 +9,19 @@ import (
 	"time"
 )
 
-type lifoCacheSuit struct {
+type lifoCacheSuite struct {
 	suite.Suite
 }
 
-func (s *lifoCacheSuit) SetupTest() {
+func (s *lifoCacheSuite) SetupTest() {
 
 }
 
-func TestLIFOCacheSuitInit(t *testing.T) {
-	suite.Run(t, new(lifoCacheSuit))
+func TestLIFOCacheSuiteInit(t *testing.T) {
+	suite.Run(t, new(lifoCacheSuite))
 }
 
-func (s *lifoCacheSuit) TestLIFOCache_Add() {
+func (s *lifoCacheSuite) TestLIFOCache_Add() {
 
 	s.Run("NonExceedingSlotLimit", func() {
 		c := &conf.Config{

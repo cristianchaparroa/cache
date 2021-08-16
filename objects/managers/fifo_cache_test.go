@@ -9,19 +9,19 @@ import (
 	"time"
 )
 
-type fifoCacheSuit struct {
+type fifoCacheSuite struct {
 	suite.Suite
 }
 
-func (s *fifoCacheSuit) SetupTest() {
+func (s *fifoCacheSuite) SetupTest() {
 
 }
 
-func TestFIFOCacheSuitInit(t *testing.T) {
-	suite.Run(t, new(fifoCacheSuit))
+func TestFIFOCacheSuiteInit(t *testing.T) {
+	suite.Run(t, new(fifoCacheSuite))
 }
 
-func (s *fifoCacheSuit) TestFIFOCache_Add() {
+func (s *fifoCacheSuite) TestFIFOCache_Add() {
 
 	s.Run("NonExceedingSlotLimit", func() {
 		c := &conf.Config{

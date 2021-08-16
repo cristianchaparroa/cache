@@ -3,7 +3,7 @@ package objects
 import "time"
 
 const (
-	defaultTTL = 0
+	DefaultTTL = 0
 )
 
 // Object is the domain object with will be stored in cache.
@@ -18,7 +18,7 @@ func NewObject(data string) *Object {
 	now := time.Now()
 	return &Object{
 		Data:      data,
-		TTL:       defaultTTL,
+		TTL:       DefaultTTL,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
