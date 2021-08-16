@@ -94,6 +94,40 @@ func (m *memory) Add(key string, object interface{}) bool {
 	return !exist
 }
 
+// Set will change old object in the oldKey to the new object.
+// It will not modify the order of the list
+func (m *memory) Set(oldKey, newKey string, object interface{}) bool {
+
+	// retrieve the old element
+	old, exist := m.storage[oldKey]
+	if !exist {
+		return false
+	}
+
+	// create a new element with new values
+	element := &Record{
+		key:   newKey,
+		value: object,
+	}
+
+	if m.Len() == 1 {
+		m.ll.Remove(old)
+		delete(m.storage, oldKey)
+		e := m.ll.PushBack(element)
+		m.storage[newKey] = e
+		return true
+	}
+
+	// retrieve the next element
+	next := old.Next()
+	e := m.ll.InsertBefore(element, next)
+	m.storage[newKey] = e
+	m.ll.Remove(old)
+	delete(m.storage, oldKey)
+
+	return true
+}
+
 func (m *memory) Get(key string) (interface{}, bool) {
 	v, exist := m.storage[key]
 	if exist {

@@ -2,6 +2,7 @@ package datasources
 
 import (
 	"cache/app/conf"
+	"container/list"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -157,5 +158,70 @@ func (s *memoryStorageSuite) TestMemory_Back() {
 		m := NewMemoryStorage(c)
 		m.Add("1", `{"text": "front"}`)
 		s.NotNil(m.Back())
+	})
+}
+
+func (s *memoryStorageSuite) TestMemory_Set() {
+	s.Run("ReplaceObject", func() {
+
+		ll := list.New()
+		slots := 10
+		storage := make(map[string]*list.Element, slots)
+		m := memory{
+			storage,
+			ll,
+			slots,
+		}
+
+		m.Add("1", `{"text": "one"}`)
+		m.Add("2", `{"text": "two"}`)
+		m.Add("3", `{"text": "three"}`)
+
+		newKey := "10"
+		isSet := m.Set("2", newKey, `{"text": "ten"}`)
+		s.Equal(true, isSet)
+
+		next := storage["3"]
+		prev := next.Prev()
+
+		prevRecord := prev.Value.(*Record)
+		prevKey := prevRecord.key.(string)
+
+		s.Equal(newKey, prevKey)
+
+		pp := storage["1"]
+		ppNext := pp.Next()
+
+		ppNextRecord := ppNext.Value.(*Record)
+		ppNextRecordKey := ppNextRecord.key.(string)
+
+		expectedLen := 3
+		s.Equal(newKey, ppNextRecordKey)
+		s.Equal(expectedLen, m.Len())
+	})
+
+	s.Run("ReplaceObjectWithNext", func() {
+		ll := list.New()
+		slots := 10
+
+		storage := make(map[string]*list.Element, slots)
+		m := memory{
+			storage,
+			ll,
+			slots,
+		}
+		m.Add("1", `{"text": "one"}`)
+
+		newKey := "2"
+		isSet := m.Set("1", newKey, `{"text": "ten"}`)
+		s.Equal(true, isSet)
+
+		front := ll.Front()
+		frontRecord := front.Value.(*Record)
+		frontKey := frontRecord.key.(string)
+
+		expectedLen := 1
+		s.Equal(newKey, frontKey)
+		s.Equal(expectedLen, m.Len())
 	})
 }
