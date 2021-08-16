@@ -3,7 +3,7 @@ package objects
 import "time"
 
 const (
-	DefaultTTL = 0
+	NeverExpires = 0
 )
 
 // Object is the domain object with will be stored in cache.
@@ -18,7 +18,7 @@ func NewObject(data string) *Object {
 	now := time.Now()
 	return &Object{
 		Data:      data,
-		TTL:       DefaultTTL,
+		TTL:       NeverExpires,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -35,6 +35,11 @@ func NewObjectWithTTL(data string, ttl int64) *Object {
 }
 
 func (o *Object) IsExpired() bool {
+
+	if o.TTL == NeverExpires {
+		return false
+	}
+
 	now := time.Now()
 	expectTimeLived := o.CreatedAt.Add(time.Second * time.Duration(o.TTL))
 

@@ -22,7 +22,7 @@ const (
 
 type Config struct {
 	Slots  int    `yaml:"slots"`
-	TTL    int    `yaml:"ttl"`
+	TTL    int64  `yaml:"ttl"`
 	Policy string `yaml:"policy"`
 }
 
