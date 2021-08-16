@@ -20,6 +20,31 @@ func newObjectManager(conf *conf.Config, builder ports.CacheBuilder) ports.Objec
 	return &objectManager{cache: builder.Build(conf.Policy)}
 }
 
-func (m *objectManager) Create(o *objects.Object) (*objects.Object, error) {
-	return nil, nil
+func (m *objectManager) Save(key string, o *objects.Object) (*objects.Object, error) {
+	o, err := m.cache.Get(key)
+
+	if err == objectNotFound {
+		addedObject := m.cache.Add(key, o)
+		if addedObject {
+			return o, nil
+		}
+		return nil, objectNotStored
+	}
+
+	isUpdated := m.cache.Update(key, o)
+
+	if !isUpdated {
+		return nil, objectNotUpdated
+	}
+
+	return o, nil
+}
+
+func (m *objectManager) GetByKey(key string) (*objects.Object, error) {
+	return m.cache.Get(key)
+}
+
+func (m *objectManager) Delete(key string) error {
+	_, err := m.cache.Delete(key)
+	return err
 }

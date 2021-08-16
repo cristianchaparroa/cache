@@ -9,5 +9,11 @@ import (
 type ObjectManager interface {
 
 	// Create store a new object in the system
-	Create(o *objects.Object) (*objects.Object, error)
+	Save(key string, o *objects.Object) (*objects.Object, error)
+
+	// GetByKey returns an object if exist
+	GetByKey(key string) (*objects.Object, error)
+
+	// Delete remove an object
+	Delete(key string) error
 }

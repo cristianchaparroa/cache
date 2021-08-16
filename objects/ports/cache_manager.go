@@ -9,6 +9,9 @@ type CacheManager interface {
 	// with eviction policies.
 	Add(key string, o *objects.Object) bool
 
+	// Update change the object store in the specified key
+	Update(key string, o *objects.Object) bool
+
 	// Get retrieves an object if exists or is not expired
 	Get(key string) (*objects.Object, error)
 
