@@ -32,8 +32,20 @@ func (c *baseCache) Get(key string) (*objects.Object, error) {
 	}
 
 	if o.IsExpired() {
+		c.storage.Delete(key)
 		return nil, objectNotFound
 	}
 
 	return o, nil
+}
+
+func (c *baseCache) Update(key string, o *objects.Object) bool {
+
+	_, exist := c.storage.Get(key)
+
+	if !exist {
+		return false
+	}
+
+	return c.storage.Set(key, key, o)
 }
