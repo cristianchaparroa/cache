@@ -8,8 +8,8 @@ import (
 )
 
 func init() {
-	err := core.Injector.Provide(newObjectWriter)
-	core.CheckInjection(err, "newObjectWriter")
+	err := core.Injector.Provide(newObjectsHandler)
+	core.CheckInjection(err, "newObjectsHandler")
 }
 
 // ObjectsHandler is in charge to handle the HTTP request for objects
@@ -18,7 +18,7 @@ type ObjectsHandler struct {
 }
 
 // NewObjectsHandler it creates a pointer to ObjectsHandler
-func newObjectWriter(manager ports.ObjectManager) *ObjectsHandler {
+func newObjectsHandler(manager ports.ObjectManager) *ObjectsHandler {
 	return &ObjectsHandler{manager: manager}
 }
 
@@ -34,8 +34,7 @@ func (h *ObjectsHandler) Save(c *gin.Context) {
 	o, err := h.manager.Save(req.Key, req.ToObject())
 
 	if err != nil {
-		// TODO: validate which kind of error should be here
-		c.JSON(http.StatusUnprocessableEntity, err)
+		c.JSON(http.StatusInsufficientStorage, err)
 		return
 	}
 

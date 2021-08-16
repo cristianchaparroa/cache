@@ -3,6 +3,7 @@ package managers
 import (
 	"cache/app/datasources"
 	"cache/objects"
+	"cache/objects/ports"
 )
 
 type baseCache struct {
@@ -14,7 +15,7 @@ func (c *baseCache) Delete(key string) (*objects.Object, error) {
 	if bool {
 		return obj.(*objects.Object), nil
 	}
-	return nil, objectNotFound
+	return nil, ports.ObjectNotFound
 }
 
 func (c *baseCache) Get(key string) (*objects.Object, error) {
@@ -22,7 +23,7 @@ func (c *baseCache) Get(key string) (*objects.Object, error) {
 	obj, exist := c.storage.Get(key)
 
 	if !exist {
-		return nil, objectNotFound
+		return nil, ports.ObjectNotFound
 	}
 
 	o := obj.(*objects.Object)
@@ -33,7 +34,7 @@ func (c *baseCache) Get(key string) (*objects.Object, error) {
 
 	if o.IsExpired() {
 		c.storage.Delete(key)
-		return nil, objectNotFound
+		return nil, ports.ObjectNotFound
 	}
 
 	return o, nil
