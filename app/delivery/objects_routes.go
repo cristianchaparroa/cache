@@ -8,7 +8,7 @@ func setupObjectsRoutes(s *server) {
 
 	objectGroup := s.router.Group("/object")
 	objectGroup.GET(":key", handler.GetByKey)
-	objectGroup.POST("", handler.Save)
+	objectGroup.POST(":key", handler.Save)
 	objectGroup.PUT(":key", handler.Save)
 	objectGroup.DELETE(":key", handler.DeleteByKey)
 }
