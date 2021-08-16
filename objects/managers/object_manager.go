@@ -23,18 +23,18 @@ func newObjectManager(conf *conf.Config, builder ports.CacheBuilder) ports.Objec
 func (m *objectManager) Save(key string, o *objects.Object) (*objects.Object, error) {
 	_, err := m.cache.Get(key)
 
-	if err == objectNotFound {
+	if err == ports.ObjectNotFound {
 		addedObject := m.cache.Add(key, o)
 		if addedObject {
 			return o, nil
 		}
-		return nil, objectNotStored
+		return nil, ports.ObjectNotStored
 	}
 
 	isUpdated := m.cache.Update(key, o)
 
 	if !isUpdated {
-		return nil, objectNotUpdated
+		return nil, ports.ObjectNotStored
 	}
 
 	return o, nil
