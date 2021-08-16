@@ -36,7 +36,7 @@ func (s *objectsHandlerSuite) TestObjectsHandler_Save_bad_request() {
 	rawData := `{"user": "test"}`
 	obj := objects.NewObject(rawData)
 
-	s.objectsManager.
+	s.objectsManager.Mock.
 		On("Save", mock.Anything, mock.Anything).
 		Return(obj, nil).
 		Once()
@@ -55,7 +55,7 @@ func (s *objectsHandlerSuite) TestObjectsHandler_Save_InsufficientStorage() {
 		Value: "1",
 	}}
 
-	s.objectsManager.
+	s.objectsManager.Mock.
 		On("Save", mock.Anything, mock.Anything).
 		Return(nil, ports.ObjectNotStored).
 		Once()
@@ -77,7 +77,7 @@ func (s *objectsHandlerSuite) TestObjectsHandler_Save_Successfully() {
 		Value: "1",
 	}}
 
-	s.objectsManager.
+	s.objectsManager.Mock.
 		On("Save", mock.Anything, mock.Anything).
 		Return(obj, nil).
 		Once()
@@ -89,4 +89,39 @@ func (s *objectsHandlerSuite) TestObjectsHandler_Save_Successfully() {
 	c.Params = params
 	s.handler.Save(c)
 	s.Equal(http.StatusOK, recorder.Code)
+}
+
+func (s *objectsHandlerSuite) TestObjectsHandler_Delete_BadRequest() {
+
+	s.objectsManager.Mock.
+		On("Delete", mock.Anything).
+		Return(ports.ObjectNotFound).
+		Once()
+
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.Request, _ = http.NewRequest(http.MethodDelete, "/object", nil)
+	s.handler.DeleteByKey(c)
+	s.Equal(http.StatusBadRequest, recorder.Code)
+}
+
+func (s *objectsHandlerSuite) TestObjectsHandler_Delete_ObjectNotFound() {
+	params := gin.Params{gin.Param{
+		Key:   "key",
+		Value: "1",
+	}}
+
+	s.objectsManager.Mock.
+		On("Delete", mock.Anything).
+		Return(ports.ObjectNotFound).
+		Once()
+
+	recorder := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(recorder)
+	c.Request, _ = http.NewRequest(http.MethodDelete, "/object", nil)
+	c.Params = params
+	s.handler.DeleteByKey(c)
+
+	s.False(c.Writer.Written())
+	s.Equal(http.StatusNotFound, c.Writer.Status())
 }

@@ -4,6 +4,7 @@ import (
 	"cache/app/conf"
 	"cache/app/datasources"
 	"cache/objects"
+	"cache/objects/ports"
 	"github.com/stretchr/testify/suite"
 	"testing"
 	"time"
@@ -35,7 +36,7 @@ func (s *baseCacheSuit) TestBaseCache_Get() {
 		o, err := cache.Get("1")
 		s.NotNil(err)
 		s.Nil(o)
-		s.Equal(objectNotFound, err)
+		s.Equal(ports.ObjectNotFound, err)
 	})
 
 	s.Run("GetObjectWithInfinityTTL", func() {
@@ -72,7 +73,7 @@ func (s *baseCacheSuit) TestBaseCache_Get() {
 		o, err := cache.Get("1")
 		s.Nil(o)
 		s.NotNil(err)
-		s.Equal(objectNotFound, err)
+		s.Equal(ports.ObjectNotFound, err)
 	})
 
 	s.Run("GetObjectWithTTLAlive", func() {
@@ -124,6 +125,6 @@ func (s *baseCacheSuit) TestBaseCache_Delete() {
 		o, err := cache.Delete("1")
 		s.Nil(o)
 		s.NotNil(err)
-		s.Equal(objectNotFound, err)
+		s.Equal(ports.ObjectNotFound, err)
 	})
 }
